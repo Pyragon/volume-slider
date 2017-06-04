@@ -22,6 +22,7 @@ $(document).ready(function() {
   var state = null;
 
   var volume = 0;
+  var audio = null;
 
   function newState() {
     state = new Array(w);
@@ -29,9 +30,16 @@ $(document).ready(function() {
       state[x] = new Array(h);
   }
 
+  startAudio();
   setVolume();
   newState();
   tick();
+
+  function startAudio() {
+    audio = new Audio('normies.mp3');
+    audio.loop = true;
+    audio.play();
+  }
 
   function start() {
     fillBlocks('red');
@@ -121,6 +129,7 @@ $(document).ready(function() {
 
   function setVolume() {
     $('#volume').html('Volume: '+volume+'%');
+    audio.volume = volume / 100;
   }
 
   function checkLoss() {
