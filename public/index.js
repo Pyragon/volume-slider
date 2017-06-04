@@ -17,10 +17,17 @@ $(document).ready(function() {
 
   var fps = 1;
 
-  var loss = false;
-
   var tick_timeout = null;
 
+  var state = null;
+
+  function newState() {
+    state = new Array(w);
+    for(var x = 0; x < w; x++)
+      state[x] = new Array(h);
+  }
+
+  newState();
   tick();
 
   function start() {
@@ -29,7 +36,6 @@ $(document).ready(function() {
   }
 
   function tick() {
-    if(loss == true) return;
     tick_timeout = setTimeout(tick, 1000 / fps);
     eraseBlocks();
     move(direction);
@@ -68,9 +74,33 @@ $(document).ready(function() {
   }
 
   function topUp() {
-    cur_y--;
     clearTimeout(tick_timeout);
+    if(checkLoss()) {
+      lose();
+      return false;
+    }
+    for(var x = 0; x < our_block_size; x++) {
+      state[cur_x + x][cur_y] = true;
+      console.log(`State ${cur_x + x},${cur_y} is now true`);
+    }
+    cur_y--;
     tick();
+  }
+
+  function lose() {
+    console.log("You lose!");
+  }
+
+  function checkLoss() {
+    if(cur_y == h-1) //we've moved to second column, obv always allowed
+      return false;
+    for(var x = 0; x < our_block_size; x++) {
+      if(state[cur_x + x][cur_y+1] === true)
+        return false;
+      else
+        console.log(`No block on ${cur_x+x},${cur_y}`);
+    }
+    return true;
   }
 
   $(document).on('keydown', function(e) {
