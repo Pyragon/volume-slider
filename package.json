@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/Pyragon/volume-slider/issues"
   },
-  "homepage": "https://github.com/Pyragon/volume-slider#readme"
+  "homepage": "https://github.com/Pyragon/volume-slider#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "http": "0.0.0",
+    "jade": "^1.11.0",
+    "merge": "^1.2.0",
+    "pug": "^2.0.0-rc.2"
+  }
 }
