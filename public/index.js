@@ -122,6 +122,7 @@ $(document).ready(function() {
     volume = 0;
     fps = 1;
     direction = 'right';
+    our_block_size = 6;
     setVolume();
     newState();
     tick();
