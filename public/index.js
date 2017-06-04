@@ -15,20 +15,22 @@ $(document).ready(function() {
 
   var direction = 'right';
 
-  var fps = 2;
+  var fps = 1;
 
   var loss = false;
+
+  var tick_timeout = null;
 
   tick();
 
   function start() {
     fillBlocks('red');
-    setTimeout(tick, 1000 / fps);
+    tick_timeout = setTimeout(tick, 1000 / fps);
   }
 
   function tick() {
     if(loss == true) return;
-    setTimeout(tick, 1000 / fps);
+    tick_timeout = setTimeout(tick, 1000 / fps);
     eraseBlocks();
     move(direction);
   }
@@ -66,7 +68,14 @@ $(document).ready(function() {
   }
 
   function topUp() {
-
+    cur_y--;
+    clearTimeout(tick_timeout);
+    tick();
   }
+
+  $(document).on('keydown', function(e) {
+    if(e.which == 83) loss = true;
+    else if(e.which == 32) topUp();
+  });
 
 });
