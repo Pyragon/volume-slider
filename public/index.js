@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  var canvas = $('<canvas/>').attr({width:150, height:300}).appendTo('body');
+  var canvas = $('<canvas/>').attr({width:150, height:300}).appendTo('body div');
 
   var context = canvas.get(0).getContext('2d');
 
@@ -15,11 +15,13 @@ $(document).ready(function() {
 
   var direction = 'right';
 
-  var fps = 1;
+  var fps = 2;
 
   var tick_timeout = null;
 
   var state = null;
+
+  var volume = 0;
 
   function newState() {
     state = new Array(w);
@@ -27,6 +29,7 @@ $(document).ready(function() {
       state[x] = new Array(h);
   }
 
+  setVolume();
   newState();
   tick();
 
@@ -53,6 +56,15 @@ $(document).ready(function() {
     for(var i = 0; i < w; i++) {
       context.fillStyle = 'white';
       context.fillRect(i * block_size, cur_y * block_size, block_size, block_size);
+    }
+  }
+
+  function eraseAllBlocks() {
+    for(var x = 0; x < w; x++) {
+      for(var y = 0; y < h; y++) {
+        context.fillStyle = 'white';
+        context.fillRect(x * block_size, y * block_size, block_size, block_size);
+      }
     }
   }
 
@@ -84,11 +96,31 @@ $(document).ready(function() {
       console.log(`State ${cur_x + x},${cur_y} is now true`);
     }
     cur_y--;
+    if(cur_y % 3 === 0)
+      our_block_size--;
+    if(our_block_size == 0)
+      our_block_size = 1;
+    fps += 2;
+    volume += 5;
+    setVolume();
     tick();
   }
 
   function lose() {
     console.log("You lose!");
+    eraseAllBlocks();
+    cur_x = 0;
+    cur_y = h-1;
+    volume = 0;
+    fps = 1;
+    direction = 'right';
+    setVolume();
+    newState();
+    tick();
+  }
+
+  function setVolume() {
+    $('#volume').html('Volume: '+volume+'%');
   }
 
   function checkLoss() {
